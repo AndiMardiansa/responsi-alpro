@@ -3,6 +3,7 @@
 #include <iomanip>
 using namespace std;
 
+
 struct Mahasiswa {
     string nim;
     string nama;
@@ -13,17 +14,19 @@ struct Mahasiswa {
     char grade;
 };
 
+
 Mahasiswa mhs[100];
 int jumlahData = 0;
 
 float rekursiJumlah(float arr[], int n) {
-    
+
     if (n == 0) {
         return 0;
     }
 
     return arr[n - 1] + rekursiJumlah(arr, n - 1);
 }
+
 
 float hitungNilaiAkhir(float tugas, float uts, float uas) {
 
@@ -35,6 +38,7 @@ float hitungNilaiAkhir(float tugas, float uts, float uas) {
 
     return rekursiJumlah(nilai, 3);
 }
+
 
 char tentukanGrade(float nilai) {
 
@@ -55,37 +59,53 @@ char tentukanGrade(float nilai) {
     }
 }
 
-void bacaFile() {
 
-    ifstream file("data_nilai.txt");
+void inputData() {
 
-    if (!file) {
-        cout << "File tidak ditemukan!" << endl;
-        return;
-    }
+    ofstream file("data_nilai.txt");
 
-    while (
-        file >> mhs[jumlahData].nim
-             >> mhs[jumlahData].nama
-             >> mhs[jumlahData].tugas
-             >> mhs[jumlahData].uts
-             >> mhs[jumlahData].uas
-    ) {
+    cout << "Jumlah mahasiswa : ";
+    cin >> jumlahData;
 
-        mhs[jumlahData].akhir =
+    for (int i = 0; i < jumlahData; i++) {
+
+        cout << "\nData Mahasiswa ke-" << i + 1 << endl;
+
+        cout << "NIM    : ";
+        cin >> mhs[i].nim;
+
+        cout << "Nama   : ";
+        cin >> mhs[i].nama;
+
+        cout << "Tugas  : ";
+        cin >> mhs[i].tugas;
+
+        cout << "UTS    : ";
+        cin >> mhs[i].uts;
+
+        cout << "UAS    : ";
+        cin >> mhs[i].uas;
+
+        mhs[i].akhir =
             hitungNilaiAkhir(
-                mhs[jumlahData].tugas,
-                mhs[jumlahData].uts,
-                mhs[jumlahData].uas
+                mhs[i].tugas,
+                mhs[i].uts,
+                mhs[i].uas
             );
 
-        mhs[jumlahData].grade =
-            tentukanGrade(mhs[jumlahData].akhir);
+        mhs[i].grade =
+            tentukanGrade(mhs[i].akhir);
 
-        jumlahData++;
+        file << mhs[i].nim << " "
+             << mhs[i].nama << " "
+             << mhs[i].tugas << " "
+             << mhs[i].uts << " "
+             << mhs[i].uas << endl;
     }
 
     file.close();
+
+    cout << "\nData berhasil disimpan ke file!\n";
 }
 
 void tampilData() {
@@ -108,6 +128,7 @@ void tampilData() {
              << mhs[i].grade << endl;
     }
 }
+
 
 void cariNIM() {
 
@@ -153,6 +174,7 @@ void nilaiTerendah() {
     cout << "Nilai Akhir  : " << mhs[index].akhir << endl;
 }
 
+
 void rataRata() {
 
     float total = 0;
@@ -166,6 +188,7 @@ void rataRata() {
     cout << "\nRata-rata Nilai Akhir : "
          << rata << endl;
 }
+
 
 void simpanFile() {
 
@@ -191,28 +214,17 @@ void simpanFile() {
 
     output.close();
 
-    cout << "\nData berhasil disimpan ke file!\n";
+    cout << "\nHasil analisis berhasil disimpan!\n";
 }
 
-// Main program
+
 int main() {
 
-    // Membaca file
-    bacaFile();
-
-    // Menampilkan data
+    inputData();
     tampilData();
-
-    // Searching berdasarkan NIM
     cariNIM();
-
-    // Menampilkan nilai terendah
     nilaiTerendah();
-
-    // Menghitung rata-rata
     rataRata();
-
-    // Menyimpan hasil ke file
     simpanFile();
 
     return 0;
